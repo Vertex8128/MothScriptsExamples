@@ -21,10 +21,6 @@ public sealed class PreparingAttackModule : BehaviourModule
     public override void StartModuleExecution()
     {
         base.StartModuleExecution();
-        
-        // Issue: sometimes timer is running on start
-        if (_preparationTimer.IsRunning)
-            _preparationTimer.StopAndReset();
         _preparationTimer.StartWithSetDelay();
 
         if (!_preparingAttackModuleData.hasPreparingEffect || !enemyData.EnemyObjectDataKeeper.HasPreparingAttackHandler) return;

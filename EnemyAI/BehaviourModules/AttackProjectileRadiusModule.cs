@@ -8,8 +8,7 @@ public sealed class AttackProjectileRadiusModule : AttackProjectileModule
     private int _currentTransformListIndex;
     private bool _isGoingRight;
 
-    private const string GunPointName = "GunPoint";
-    private const float ToAxisYOffset = 90f;
+    private const float DefaultYOffset = 90f;
 
     public AttackProjectileRadiusModule(ActiveEnemyData enemyData, AttackProjectileRadiusModuleData attackProjectileRadiusModuleData) 
         : base(enemyData, attackProjectileRadiusModuleData)
@@ -24,9 +23,11 @@ public sealed class AttackProjectileRadiusModule : AttackProjectileModule
                 case RadiusFirePatternID.LeftToRight:
                     _currentTransformListIndex = _gunPointsTransformList.Count - 1;
                     break;
+                
                 case RadiusFirePatternID.RightToLeft:
                     _currentTransformListIndex = 0;
                     break;
+                
                 case RadiusFirePatternID.BackAndForth:
                     _isGoingRight = true;
                     _currentTransformListIndex = _gunPointsTransformList.Count - 1;
@@ -38,7 +39,7 @@ public sealed class AttackProjectileRadiusModule : AttackProjectileModule
     private List<Transform> CreateGunPointTransformList()
     {
         var transformList = new List<Transform>();
-        var startAngleInRads = -((_attackProjectileRadiusModuleData.radius / 2f - ToAxisYOffset) * Mathf.Deg2Rad);
+        var startAngleInRads = -((_attackProjectileRadiusModuleData.radius / 2f - DefaultYOffset) * Mathf.Deg2Rad);
         var angleStepInRads = _attackProjectileRadiusModuleData.radius >= 360f
             ? _attackProjectileRadiusModuleData.radius / _attackProjectileRadiusModuleData.gunPointNumbers * Mathf.Deg2Rad
             : _attackProjectileRadiusModuleData.radius / (_attackProjectileRadiusModuleData.gunPointNumbers - 1) * Mathf.Deg2Rad;
@@ -49,7 +50,6 @@ public sealed class AttackProjectileRadiusModule : AttackProjectileModule
             var transformPosition = new Vector3(Mathf.Cos(currentAngleInRads), Mathf.Sin(currentAngleInRads)).normalized * _attackProjectileRadiusModuleData.gunPointsOffset;
             var gunPointTransform = new GameObject().transform;
             gunPointTransform.SetParent(enemyBodyCenterTransform);
-            gunPointTransform.name = $"{GunPointName}{i}";
             gunPointTransform.position = enemyBodyCenterTransform.position + transformPosition;
             transformList.Add(gunPointTransform);
         }
@@ -66,7 +66,7 @@ public sealed class AttackProjectileRadiusModule : AttackProjectileModule
         if (_attackProjectileRadiusModuleData.firePattern == RadiusFirePatternID.Random)
         {
             var halfRadius = _attackProjectileRadiusModuleData.radius / 2f;
-            var randomAngleInRads = (Utils.GetRandomRoundedFloat(-halfRadius, halfRadius) + enemyBodyCenterTransform.eulerAngles.z + ToAxisYOffset) * Mathf.Deg2Rad;
+            var randomAngleInRads = (Utils.GetRandomRoundedFloat(-halfRadius, halfRadius) + enemyBodyCenterTransform.eulerAngles.z + DefaultYOffset) * Mathf.Deg2Rad;
             var angleVector = new Vector3(Mathf.Cos(randomAngleInRads), Mathf.Sin(randomAngleInRads)).normalized;
             var projectileCastPosition = angleVector * _attackProjectileRadiusModuleData.gunPointsOffset + enemyBodyCenterTransform.position;
             var projectileRotation = Quaternion.LookRotation(Vector3.forward, projectileCastPosition - enemyBodyCenterTransform.position);
@@ -85,11 +85,13 @@ public sealed class AttackProjectileRadiusModule : AttackProjectileModule
                     if (_currentTransformListIndex < 0)
                         _currentTransformListIndex = _gunPointsTransformList.Count - 1;
                     break;
+                
                 case RadiusFirePatternID.RightToLeft:
                     _currentTransformListIndex++;
                     if (_currentTransformListIndex > _gunPointsTransformList.Count - 1)
                         _currentTransformListIndex = 0;
                     break;
+                
                 case RadiusFirePatternID.BackAndForth:
                     if (_isGoingRight)
                     {

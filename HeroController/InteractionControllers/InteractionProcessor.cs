@@ -6,7 +6,6 @@ using UnityEngine;
 public class InteractionProcessor : MonoBehaviour
 {
     public int ObjectID { get; private set; }
-    public Collision2D LastCollisionEnterData { get; private set; }
 
     [SerializeField] [GUIColor("GetActiveToDetectCollisions")]
     protected bool isActiveToDetectCollisions;
@@ -52,10 +51,7 @@ public class InteractionProcessor : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (isActiveToDetectCollisions && collision.collider.gameObject.TryGetComponent(out InteractionProcessor interactionProcessor))
-        {
-            LastCollisionEnterData = collision;
             EnteredCollider?.Invoke(interactionProcessor);
-        }
     }
 
     private void OnCollisionExit2D(Collision2D collision)

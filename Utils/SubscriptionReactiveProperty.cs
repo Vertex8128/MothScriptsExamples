@@ -18,7 +18,6 @@ public class SubscriptionReactiveProperty <T> : ISubscriptionReactiveProperty<T>
 
     public void UnsubscribeFromChange(Action<T> unsubscriptionAction) => _onChangeValue -= unsubscriptionAction;
 
-
     public void UnsubscribeAll()
     {
         if (_onChangeValue == null) return;

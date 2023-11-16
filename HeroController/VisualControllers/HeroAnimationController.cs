@@ -18,8 +18,6 @@ public sealed class HeroAnimationController : BaseController
         _heroAnimator = heroData.HeroObjectDataKeeper.CharacterAnimator;
 
         _heroData.HeroState.SubscribeToChange(OnChangeHeroState);
-        
-        _gameData.LevelState.SubscribeToChange(SetArenaDataOnLevelStateChange);
     }
 
     private void OnChangeHeroState(HeroState heroState)
@@ -39,28 +37,6 @@ public sealed class HeroAnimationController : BaseController
             case HeroState.Defeated:
                 SetAnimationState(HeroAnimationState.Defeated); 
                 _heroData.HeroState.UnsubscribeFromChange(OnChangeHeroState);
-                break;
-        }
-    }
-
-    private void SetArenaDataOnLevelStateChange(LevelState levelState)
-    {
-        if(levelState != LevelState.ArenaStarting) return;
-        _gameData.LevelData.CurrentArenaData.ArenaState.SubscribeToChange(SetHeroEyesOnChangeArenaState);
-    }
-
-    private void SetHeroEyesOnChangeArenaState(ArenaState arenaState)
-    {
-        switch (arenaState)
-        {
-            case ArenaState.WaveSpawningGoing:
-                _heroAnimator.SetTrigger(BattleEyesHash);
-                break;
-            case ArenaState.WaveCompleted:
-                _heroAnimator.SetTrigger(DefaultEyesHash);
-                break;
-            case ArenaState.AllWavesCompleted:
-                _gameData.LevelData.CurrentArenaData.ArenaState.UnsubscribeFromChange(SetHeroEyesOnChangeArenaState);
                 break;
         }
     }

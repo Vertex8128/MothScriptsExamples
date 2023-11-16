@@ -4,8 +4,6 @@ using Random = UnityEngine.Random;
 
 public static class Utils
 {
-    private const int SafeCounterMax = 50;
-
     #region Random
 
     public static int GetRandomIntMaxIncluded(Vector2Int nums) => nums == Vector2Int.zero ? 0 : Random.Range(nums.x, nums.y + 1);
@@ -129,11 +127,6 @@ public static class Utils
             if (isYRoundedToInt)
                 yPosition = Mathf.RoundToInt(yPosition);
             spawnPosition = new Vector2(xPosition, yPosition) + (Vector2)transform.position;
-            safeCounter++;
-            
-            if (safeCounter <= SafeCounterMax) continue;
-            Debug.LogError("GetSpawnPositionWithinSquare: Free spot wasn't found!");
-            return null;
         } 
         while (IsPositionOccupied(spawnPosition, layerMask, 1f));
         return spawnPosition;
@@ -146,35 +139,12 @@ public static class Utils
         do 
         {
             spawnPosition = originPoint + (Random.insideUnitCircle.normalized * radius);
-            safeCounter++;
-            
-            if (safeCounter <= SafeCounterMax) continue;
-            Debug.LogError("GetSpawnPositionWithinCircle: Free spot wasn't found!");
-            return null;
         } 
         while (IsPositionOccupied(spawnPosition, layerMask, 1f));
         return spawnPosition;
     }
 
     #endregion
-
-
-    #region ImpactData
-
-    public static ImpactData GetOneTimeImpactInteractionData(CharacterID targetID, StatsImpactID statsImpactID, int points, bool isPercent = false)
-    {
-        return new ImpactData
-        {
-            targetID = targetID,
-            statsData = GetStatsUpdateData(statsImpactID, points, isPercent),
-            impactTypeID = ImpactTypeID.OneTimeImpact
-        };
-    }
-
-    public static StatsData GetStatsUpdateData(StatsImpactID impactID, int points, bool isPercent = false) => new StatsData(impactID, points, isPercent);
-
-    #endregion
-
 
     #region Inspector
 

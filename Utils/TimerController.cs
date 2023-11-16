@@ -43,17 +43,6 @@ public class TimerController : BaseController
         IsRunning = true;
         UpdateManager.SubscribeToUpdate(RunTimerOnUpdate);
     }
-    
-    public void StartWithCustomDelay(float delay)
-    {
-        if (_delay == 0 || IsRunning)
-            DebugTimer();      
-        
-        var timer = new TimerController(StartWithAction, false, delay);
-        AddChildController(timer);
-        timer.StartWithSetDelay();
-        IsRunning = true;
-    }
 
     public void Pause() => IsPaused = true;
     public void Continue() => IsPaused = false;
@@ -80,6 +69,7 @@ public class TimerController : BaseController
             StopAndReset();
     }
 
+    // Display an error message if there are any issues with the timer.
     private void DebugTimer()
     {
         var stackTrace = new System.Diagnostics.StackTrace(); 

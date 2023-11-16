@@ -36,14 +36,17 @@ public sealed class RetreatToPointModule : BehaviourModule
             case ReatreatTypeID.AwayFromTarget:
                 enemyPathSetupData.SetRetreatType(heroBodyCenterTransform.position,_retreatDistance, _retreatOffset);
                 break;
+            
             case ReatreatTypeID.CloserToTarget:
                 var direction = (enemyBodyCenterTransform.position - heroBodyCenterTransform.position).normalized;
                 var retreatFromPosition = enemyBodyCenterTransform.position + direction * RetreatFromPositionCoefficient;
                 enemyPathSetupData.SetRetreatType(retreatFromPosition,_retreatDistance, _retreatOffset);
                 break;
+            
             case ReatreatTypeID.Random:
                 enemyPathSetupData.SetRandomType(_retreatDistance, _retreatOffset);
                 break;
+            
             default:
                 Debug.LogError("Retreat Path type wasn't set");
                 enemyPathSetupData.SetRetreatType(heroBodyCenterTransform.position,_retreatDistance, _retreatOffset); 

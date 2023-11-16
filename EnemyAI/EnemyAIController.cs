@@ -12,12 +12,6 @@ public class EnemyAIController : BaseController
     public EnemyAIController(ActiveEnemyData enemyData)
     {
         _enemyData = enemyData;
-        
-        var oneTimeImpactInteractionData = Utils.GetOneTimeImpactInteractionData(CharacterID.Hero, StatsImpactID.CurrentHealthDecrease, _enemyData.InitialEnemyData.baseDamage);
-        var interactionDataList = new List<ImpactData>{oneTimeImpactInteractionData};
-
-        enemyData.EnemyObjectDataKeeper.EnemyInteractionProcessor.InteractionDataList = interactionDataList;
-        
         _currentBehaviourModule = new BehaviourModule();        
         _behaviourModulesList = new Dictionary<EnemyState, BehaviourModule>();
         foreach (var behavioralData in enemyData.BehaviourModuleDataList)

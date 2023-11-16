@@ -64,7 +64,7 @@ public class AttackProjectileModule : BehaviourModule
     }
 
     protected virtual void CastProjectile(){}
-    protected virtual void ResetCastValues() { }
+    protected virtual void ResetCastValues(){}
 
     public override void InterruptModuleExecution()
     {

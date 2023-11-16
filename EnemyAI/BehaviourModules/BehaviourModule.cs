@@ -15,7 +15,6 @@ public class BehaviourModule : BaseController
     protected readonly Transform heroFeetCenterTransform;
 
     private readonly IBehaviourModuleData _behaviourModuleData;
-
     private EnemyState _exitEnemyState;
 
     public BehaviourModule()
